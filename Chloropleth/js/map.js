@@ -192,7 +192,7 @@ function getStyleEP(feature){
 		return {
 			stroke: false, 
 			fill: true, 
-			fillColor: 'orange',
+			fillColor: 'brown',
 			fillOpacity: 1
 		}
 	}
@@ -211,7 +211,7 @@ function getStyleMP(feature){
 		return {
 			stroke: false, 
 			fill: true, 
-			fillColor: 'orange',
+			fillColor: 'brown',
 			fillOpacity: 1
 		}
 	}
@@ -230,7 +230,7 @@ function getStyleNP(feature){
 		return {
 			stroke: false, 
 			fill: true, 
-			fillColor: 'orange',
+			fillColor: 'brown',
 			fillOpacity: 1
 		}
 	}
@@ -249,7 +249,7 @@ function getStyle2(feature){
 		return {
 			stroke: false, 
 			fill: true, 
-			fillColor: 'orange',
+			fillColor: 'brown',
 			fillOpacity: 1
 		}
 	}
