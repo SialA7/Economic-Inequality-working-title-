@@ -54,14 +54,14 @@ body {
 .navigation-item:hover{
 	max-height: 20px;
 	text-align: center;
-    background: rgb(0, 2, 5);
+    background: rgb(99, 99, 99);
 }
 
 .active-navigation-item{
 	max-height: 20px;
 	text-align: center;
     padding: 10px; 
-	background: rgb(99, 99, 99);
+	background: rgb(249, 171, 103);
     color: rgb(241, 225, 210); 
     font-family: 'Montserrat',sans-serif;
 	display: inline; 
