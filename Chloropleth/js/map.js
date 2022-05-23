@@ -104,10 +104,15 @@ function mapGeoJSON(extremePoverty, moderatePoverty, nearPoverty, laborIndex){
 	brew2.classify('quantiles');
 
 	// create the layer and add to map
+	geojson_layer2 = L.geoJson(geojson_data, {
+		style: getStyle2, 
+		onEachFeature: onEachFeature2
+	}).addTo(map);
+	
 	geojson_layerEP = L.geoJson(geojson_data, {
 		style: getStyleEP, 
 		onEachFeature: onEachFeatureEP
-	});
+	}).addTo(map);
 
 	geojson_layerMP = L.geoJson(geojson_data, {
 		style: getStyleMP, 
@@ -118,11 +123,6 @@ function mapGeoJSON(extremePoverty, moderatePoverty, nearPoverty, laborIndex){
 		style: getStyleNP, 
 		onEachFeature: onEachFeatureNP
 	});
-
-	geojson_layer2 = L.geoJson(geojson_data, {
-		style: getStyle2, 
-		onEachFeature: onEachFeature2
-	}).addTo(map);
 
 	let layers = {
         "Extreme Poverty": geojson_layerEP,
