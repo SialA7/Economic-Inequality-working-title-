@@ -13,11 +13,11 @@ body,html {
 body {
 	display: grid;
 	grid-template-rows: 130px 1fr;
-	grid-template-columns: 170px 1fr;
+	grid-template-columns: 300px 1fr;
 	grid-template-areas: 
 	"header header"
     "navigation navigation"
-	"content content"
+	"dashboard content"
     "footer footer"; 
 }
 
@@ -116,8 +116,8 @@ body {
 
 .legend {
 	line-height: 18px;
-	color: rgb(31, 7, 70);
-	background: rgb(184, 184, 184);
+	color: rgb(255, 255, 255);
+	background: rgb(103, 103, 103);
 	min-width: 170px; 
 	text-align: center; 
 }
@@ -127,3 +127,21 @@ body {
 	float: none;
 	margin: auto;
 }
+
+.dashboard {
+	grid-area: dashboard;
+}
+
+.dashboard .closebtn {
+	position: absolute;
+	top: 0;
+	right: 25px;
+	font-size: 36px;
+	margin-left: 50px;
+	
+  }
+
+  #main {
+	transition: margin-left .5s; /* If you want a transition effect */
+	padding: 20px;
+  }
