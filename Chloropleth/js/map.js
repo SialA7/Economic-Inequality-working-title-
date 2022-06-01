@@ -5,23 +5,32 @@ let lon = 0;
 let zl = 3;
 let path = 'data/laborinthdata.csv';
 let markers = L.featureGroup();
-let povertyMarkers = L.featureGroup(); 
 let csvdata;
 
-let brewEP = new classyBrew();
-let brewMP = new classyBrew(); 
-let brewNP = new classyBrew(); 
-let brew2 = new classyBrew(); 
+let colorMat = [['#205DD4', '#3f40a9', '#5d227e'],
+				['#839AE2', '#7256aa', '#9640af'],
+				['#E5D6F0', '#D592B8', '#C44E7F']];
+let matX;
+let matY;
+ /* Labor rights scores already normalized: (0-3.33), (3.34-6.33), (6.34-10)
+ 	Working poverty: 
+	 	Extremely poor: 0-79% (0-26), (27-53), (54-80)
+		Moderately poor: 0-43% (0-14), (15-29), (30-44)
+		Near poor: 0-45% (0-15), (16-30), (31-45)
+		Overall working poverty (EP+MP +NP): (0-33)(34-66)(67-100)
+		
+	[[(0,0), (0,1), (0,2)],
+	[(1,0), (1,1), (1,2)],
+	[(2,0), (2,1), (2,2)]]*/
 
 // geojson
 let geojsonPath = 'data/laborinthworld.geojson';
 let geojson_data;
 
-let geojson_layer2;
-
-let geojson_layerEP;
-let geojson_layerMP; 
-let geojson_layerNP; 
+let geojson_layerEP; //labor index + extreme poverty rates
+let geojson_layerMP; //labor index + moderate poverty rates
+let geojson_layerNP; // labor index + near poverty rates
+let geojson_layerOP;
 
 
 //legend
@@ -53,6 +62,7 @@ function mapGeoJSON(extremePoverty, moderatePoverty, nearPoverty, laborIndex){
 	let EPvalues = [];
 	let MPvalues = [];
 	let NPvalues = [];
+	let OPvalues = [];
 	let LIvalues = [];
 
 	geojson_data.features.forEach(function(item,index){
@@ -75,6 +85,7 @@ function mapGeoJSON(extremePoverty, moderatePoverty, nearPoverty, laborIndex){
 		EPvalues.push(item.properties[extremePoverty])
 		MPvalues.push(item.properties[moderatePoverty])
 		NPvalues.push(item.properties[nearPoverty])
+		OPvalues.push(item.properties[extremePoverty] + item.properties[moderatePoverty] + item.properties[nearPoverty]);
 		LIvalues.push(item.properties[laborIndex])
 	})
 
@@ -83,31 +94,7 @@ function mapGeoJSON(extremePoverty, moderatePoverty, nearPoverty, laborIndex){
 	nPov = nearPoverty; 
 	labInd = laborIndex;
 
-	brewEP.setSeries(EPvalues);
-	brewEP.setNumClasses(5);
-	brewEP.setColorCode('Blues');
-	brewEP.classify('quantiles');
-
-	brewEP.setSeries(MPvalues);
-	brewEP.setNumClasses(5);
-	brewEP.setColorCode('Blues');
-	brewEP.classify('quantiles');
-
-	brewEP.setSeries(NPvalues);
-	brewEP.setNumClasses(5);
-	brewEP.setColorCode('Blues');
-	brewEP.classify('quantiles');
-
-	brew2.setSeries(LIvalues);
-	brew2.setNumClasses(4);
-	brew2.setColorCode('Reds')
-	brew2.classify('quantiles');
-
 	// create the layer and add to map
-	geojson_layer2 = L.geoJson(geojson_data, {
-		style: getStyle2, 
-		onEachFeature: onEachFeature2
-	}).addTo(map);
 	
 	geojson_layerEP = L.geoJson(geojson_data, {
 		style: getStyleEP, 
@@ -124,16 +111,22 @@ function mapGeoJSON(extremePoverty, moderatePoverty, nearPoverty, laborIndex){
 		onEachFeature: onEachFeatureNP
 	});
 
+	geojson_layerOP = L.geoJson(geojson_data,{
+		style: getStyleOP,
+		onEachFeature: onEachFeatureOP
+	})
+
 	let layers = {
         "Extreme Poverty": geojson_layerEP,
 		"Moderate Poverty": geojson_layerMP, 
 		"Near Poverty": geojson_layerNP,
+		//"Overall Working Poverty Rate" : geojson_layerOP
     }
 
 	L.control.layers(null,layers).addTo(map)
 
 	// fit to bounds
-	map.fitBounds(geojson_layer2.getBounds())
+	map.fitBounds(geojson_layerEP.getBounds())
 
 	createLegend();
 	createInfoPanel();
@@ -169,18 +162,43 @@ function readCSV(){
 	});
 }
 
+var CSIcon = L.Icon.extend({
+    options: {
+        iconUrl: 'images/person-icon3.png',
+        iconSize: [40, 40],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+    }
+});
+
+var CSIcon2 = L.Icon.extend({
+    options: {
+        iconUrl: 'images/person-icon2.png',
+        iconSize: [40, 40],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+    }
+});
 
 function mapCSV(){
 
-	// clear layers in case you are calling this function more than once
-	markers.clearLayers();
-
 	// loop through each entry
    csvdata.data.forEach(function(item,index){
-		/*if(casestudy = true){
-			create infoPanel, 
+		if(item.CaseStudy != "" && item.CaseStudy != undefined){
+			let marker = L.marker([item.Latitude,item.Longitude], CSIcon)
+			.on('mouseover', function(){
+				marker.setIcon(new CSIcon2); 
+			})
+			.on('mouseout', function(){
+				marker.setIcon(new CSIcon);
+			})
+			.on('click', function(){
+				window.open(item.CaseStudy);
+			})
+
+			marker.setIcon(new CSIcon);
 			markers.addLayer(marker);
-		}*/
+		}
 	}); 
 
 	markers.addTo(map)
@@ -197,14 +215,37 @@ function getStyleEP(feature){
 		}
 	}
 	else {
-		return {
+		if(feature.properties[extrPov] <= 26){
+			matX = 0
+		} else if (feature.properties[extrPov] <= 53){
+			matX = 1
+		} else if (feature.properties[extrPov] <= 100){
+			matX = 2
+		}
+
+		if (feature.properties[labInd] <= 3.33){
+			matY = 2
+		} else if (feature.properties[labInd] <= 6.66){
+			matY = 1
+		} else if (feature.properties[labInd] <= 10){
+			matY = 0
+		}
+
+		return{
 			stroke: false,
-			fill: true,
-			fillColor: brewEP.getColorInRange(feature.properties[extrPov]),
-			fillOpacity: 0.4
+			fill: true, 
+			fillColor: colorMat[matY][matX],
+			fillOpacity: 1
 		}
 	}
 }
+
+/* Labor rights scores already normalized: (0-3.33), (3.34-6.33), (6.34-10)
+ 	Working poverty: 
+	 	Extremely poor: 0-79% (0-26), (27-53), (54-80)
+		Moderately poor: 0-43% (0-14), (15-29), (30-44)
+		Near poor: 0-45% (0-15), (16-30), (31-45)
+		Overall working poverty (EP+MP +NP): (0-33)(34-66)(67-100)*/
 
 function getStyleMP(feature){
 	if (feature.properties[modPov] == -1){
@@ -216,35 +257,32 @@ function getStyleMP(feature){
 		}
 	}
 	else {
-		return {
+		if(feature.properties[modPov] <= 14){
+			matX = 0
+		} else if (feature.properties[modPov] <= 29){
+			matX = 1
+		} else if (feature.properties[modPov] <= 44){
+			matX = 2
+		}
+
+		if (feature.properties[labInd] <= 3.33){
+			matY = 2
+		} else if (feature.properties[labInd] <= 6.66){
+			matY = 1
+		} else if (feature.properties[labInd] <= 10){
+			matY = 0
+		}
+
+		return{
 			stroke: false,
-			fill: true,
-			fillColor: brewEP.getColorInRange(feature.properties[modPov]),
-			fillOpacity: 0.4
+			fill: true, 
+			fillColor: colorMat[matY][matX],
+			fillOpacity: 1
 		}
 	}
 }
 
 function getStyleNP(feature){
-	if (feature.properties[nPov] == -1){
-		return {
-			stroke: false, 
-			fill: true, 
-			fillColor: '#636363',
-			fillOpacity: 1
-		}
-	}
-	else {
-		return {
-			stroke: false,
-			fill: true,
-			fillColor: brewEP.getColorInRange(feature.properties[nPov]),
-			fillOpacity: 0.4
-		}
-	}
-}
-
-function getStyle2(feature){
 	if (feature.properties[extrPov] == -1){
 		return {
 			stroke: false, 
@@ -254,21 +292,71 @@ function getStyle2(feature){
 		}
 	}
 	else {
-		return {
+		if(feature.properties[nPov] <= 15){
+			matX = 0
+		} else if (feature.properties[nPov] <= 30){
+			matX = 1
+		} else if (feature.properties[nPov] <= 100){
+			matX = 2
+		}
+
+		if (feature.properties[labInd] <= 3.33){
+			matY = 2
+		} else if (feature.properties[labInd] <= 6.66){
+			matY = 1
+		} else if (feature.properties[labInd] <= 10){
+			matY = 0
+		}
+
+		return{
 			stroke: false,
-			fill: true,
-			fillColor: brew2.getColorInRange(feature.properties[labInd]),
-			fillOpacity: 0.8
+			fill: true, 
+			fillColor: colorMat[matY][matX],
+			fillOpacity: 1
 		}
 	}
 }
 
+function getStyleOP(feature){
+	if (feature.properties[extrPov] == -1){
+		return {
+			stroke: false, 
+			fill: true, 
+			fillColor: '#636363',
+			fillOpacity: 1
+		}
+	}
+	else {
+		if(feature.properties[nPov] + feature.properties[modPov] + feature.properties[extrPov] <= 33){
+			matX = 0
+		} else if (feature.properties[nPov] + feature.properties[modPov] + feature.properties[extrPov] <= 66){
+			matX = 1
+		} else if (feature.properties[nPov] + feature.properties[modPov] + feature.properties[extrPov] <= 100){
+			matX = 2
+		}
+
+		if (feature.properties[labInd] <= 3.33){
+			matY = 2
+		} else if (feature.properties[labInd] <= 6.66){
+			matY = 1
+		} else if (feature.properties[labInd] <= 10){
+			matY = 0
+		}
+
+		return{
+			stroke: false,
+			fill: true, 
+			fillColor: colorMat[matY][matX],
+			fillOpacity: 1
+		}
+	}
+}
 
 function createLegend(){
 	legend.onAdd = function (map) {
 		var div = L.DomUtil.create('div', 'info legend');
 			div.innerHTML +=
-					'Relationship: <br> <img src= images/legend.png width = 150 height = 150>';
+					'<b> Relationship: </b> <br> <img src= images/legend.png width = 150 height = 150> <br> <img src = images/legend2.png width = 100 height = 100>';
 		
 			return div;
 		};
@@ -333,10 +421,10 @@ function onEachFeatureNP(feature, layer) {
 	});
 }
 
-function onEachFeature2(feature, layer) {
+function onEachFeatureOP(feature, layer){
 	layer.on({
 		mouseover: highlightFeature,
-		mouseout: resetHighlight,
+		mouseout: resetHighlightOP,
 		click: zoomToFeature
 	});
 }
@@ -347,11 +435,9 @@ function highlightFeature(e) {
 
 	// style to use on mouse over
 	layer.setStyle({
-		weight: 2,
+		weight: 3,
 		stroke: true, 
 		color: '#ffffff',
-		fillColor: '#000000', 
-		fillOpacity: 0.6, 
 	});
 
 	if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -362,10 +448,6 @@ function highlightFeature(e) {
 }
 
 // on mouse out, reset the style, otherwise, it will remain highlighted
-function resetHighlight(e) {
-	geojson_layer2.resetStyle(e.target);
-	info_panel.update() // resets infopanel
-}
 
 function resetHighlightEP(e) {
 	geojson_layerEP.resetStyle(e.target);
@@ -378,6 +460,10 @@ function resetHighlightMP(e) {
 function resetHighlightNP(e) {
 	geojson_layerNP.resetStyle(e.target);
 	info_panel.update() // resets infopanel
+}
+function resetHighlightOP(e) {
+	geojson_layerOP.resetStyle(e.target);
+	info_panel.update()
 }
 
 // on mouse click on a feature, zoom in to it
