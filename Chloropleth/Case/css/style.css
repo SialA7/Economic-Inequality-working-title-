@@ -54,7 +54,7 @@ body {
 .navigation-item:hover{
 	max-height: 20px;
 	text-align: center;
-    background: rgb(0, 2, 5);
+    background: rgb(99, 99, 99);
 }
 
 .active-navigation-item{
