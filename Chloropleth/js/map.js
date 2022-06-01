@@ -387,7 +387,7 @@ function createInfoPanel(){
 		// if feature is not highlighted
 		else
 		{
-			this._div.innerHTML = 'Hover over a country';
+			this._div.innerHTML = `Use the Toggles to see how<br> countries vary in either extreme, moderate,<br> or near poverty rates. Hover over the countries<br> to activate the info panel and  view its name, <br>levels of poverty, and labor index score. <br>Click on the orange markers to read some <br>case studies.`
 		}
 	};
 

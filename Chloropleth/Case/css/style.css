@@ -18,7 +18,7 @@ body {
 	"header header"
     "navigation navigation"
 	"title title"
-	"content content"
+	"sidebar content"
     "footer footer"; 
 }
 
@@ -54,7 +54,7 @@ body {
 .navigation-item:hover{
 	max-height: 20px;
 	text-align: center;
-    background: rgb(99, 99, 99);
+    background: rgb(0, 2, 5);
 }
 
 .active-navigation-item{
@@ -143,3 +143,17 @@ h2{
     font-family: 'Helvetica', sans-serif;
 }
 
+.sidebar {
+	grid-area: sidebar;
+	padding:10px;
+	background-color: rgb(0, 0, 0);
+	overflow: auto; /* allows the sidebar to overflow with a scrollbar */
+}
+
+.sidebar-item {
+    padding: 40px; /* adds inner padding */
+    background: rgb(255, 253, 253); /* background color of the card */
+    border: 1px solid rgb(255, 255, 255); /* border width and color */
+    margin: 5px; /* outer padding */
+	cursor: pointer; /* change cursor to hand on hover */
+}
