@@ -356,7 +356,7 @@ function createLegend(){
 	legend.onAdd = function (map) {
 		var div = L.DomUtil.create('div', 'info legend');
 			div.innerHTML +=
-					'<b> Relationship: </b> <br> <img src= images/legend.png width = 150 height = 150> <br> <img src = images/legend2.png width = 100 height = 100>';
+					'<b> Legend: </b> <br> <img src= images/legend.png width = 150 height = 150> <br> <img src = images/legend2.png width = 100 height = 100>';
 		
 			return div;
 		};
