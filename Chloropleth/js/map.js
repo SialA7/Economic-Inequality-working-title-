@@ -468,6 +468,57 @@ function resetHighlightOP(e) {
 
 // on mouse click on a feature, zoom in to it
 function zoomToFeature(e) {
+	var layer = e.target; 
 	map.fitBounds(e.target.getBounds());
+	if (layer.feature.properties[extrPov] != -1 && layer.feature.properties[extrPov] != undefined && layer.feature.properties[extrPov] != ""){
+		createDashboard(layer.feature.properties)
+	}
+}
+
+function createDashboard(properties){
+
+	// clear dashboard
+	$('.dashboard').empty();
+
+	console.log(properties)
+
+	// chart title
+	let title = 'Working Poverty Levels in ' + properties['Country'];
+	let abovePoverty = 100 - (Number(properties['ExtremePoor']) + Number(properties['ModeratePoor']) + Number(properties['NearPoor']));
+
+	// data values
+	let graphdata = [Number(properties['ExtremePoor']), 
+					Number(properties['ModeratePoor']), 
+					Number(properties['NearPoor']), abovePoverty];
+
+	// data fields
+	let fields = ['% in extreme poverty', '% in moderate poverty', '% in near poverty', '% above poverty'];
+
+	// set chart options (pull documentation from library)
+    //pie chart
+    let options = {
+		chart: {
+			type: 'pie',
+			height: 300,
+			width: 300,			
+			animations: {
+				enabled: true,
+			}
+		},
+		title: {
+			text: title,
+		},
+		series: graphdata,
+		labels: fields,
+		legend: {
+			position: 'right',
+			offsetY: 0,
+			height: 230,
+		  }
+	}; 
+	
+	// create the chart
+	let chart = new ApexCharts(document.querySelector('.dashboard'), options)
+	chart.render()
 }
 
