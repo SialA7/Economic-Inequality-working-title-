@@ -8,23 +8,22 @@ body,html {
 
 #map {
 	height: 100%;
-
 }
 
 body {
 	display: grid;
 	grid-template-rows: 130px 1fr;
-	grid-template-columns: 300px 1fr;
+	grid-template-columns: 170px 1fr;
 	grid-template-areas: 
 	"header header"
     "navigation navigation"
-	"dashboard content"
+	"title title"
+	"sidebar content"
     "footer footer"; 
 }
 
 .header {
 	grid-area: header;
-	margin-top: 0px;
 	padding:5px;
 	background-color: rgb(0, 0, 0);
 	color: rgb(254, 254, 254);
@@ -36,12 +35,12 @@ body {
 .navigation{
     grid-area: navigation;
 	height:fit-content;
-	background-color: rgb(0, 0, 0);  
+    background-color: rgb(0, 0, 0); 
 	grid-gap:0; 
 }
 
 .navigation-item{
-	height: 20px;
+	max-height: 20px;
 	text-align: center;
     padding: 10px; 
     background: rgb(0, 0, 0);
@@ -53,22 +52,22 @@ body {
 }
 
 .navigation-item:hover{
-	height: 20px;
+	max-height: 20px;
 	text-align: center;
-    background: rgb(99, 99, 99);
+    background: rgb(0, 2, 5);
 }
 
 .active-navigation-item{
-	height: 20px;
+	max-height: 20px;
 	text-align: center;
     padding: 10px; 
-	background: rgb(249, 171, 103);
+    background: rgb(249, 171, 103);
     color: rgb(241, 225, 210); 
     font-family: 'Montserrat',sans-serif;
 	display: inline; 
 	float: left;
 	position: sticky; 
-	border-right: 1px solid rgb(249, 171, 103)
+	border-right: 1px solid rgb(249, 171, 103) 
 }
 
 .title {
@@ -81,14 +80,59 @@ body {
 	font-family:'Libre Bodoni', serif;
 	font-weight:lighter;
 }
+
+.countries {
+
+	font-family:'Montserrat', sans-serif;
+	font-weight:lighter;
+	text-align: center;
+	color: rgb(0, 0, 0); 
+
+
+}
+h2{
+	margin:0px; 
+	font-size:2em;
+}
+
+/* legend styles */
+.info {
+	padding: 6px 8px;
+	font: 14px/16px Arial, Helvetica, sans-serif;
+	background: white;
+	background: rgba(255,255,255,0.8);
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 5px;
+	color:black;
+	min-width: 250px;
+	min-height: 50px;
+}
+.info h4 {
+	margin: 0 0 5px;
+	color: #777;
+}
+
+.legend {
+    line-height: 18px;
+    color: #555;
+}
+.legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.7;
+}
+
 .content {
 	margin:0;
-	height: 700px;
+	height:700px; 
 	grid-area: content;
-	background: rgb(8, 33, 60);
-    color: rgb(241, 225, 210); 
+	background: rgb(255, 255, 255);
+    color: rgb(0, 0, 0); 
 	font-family: 'Helvetica', sans-serif;
-	overflow:hidden; 
+	margin-left: 25%;
+	margin-right:25%;
 }
 
 .footer {
@@ -99,50 +143,17 @@ body {
     font-family: 'Helvetica', sans-serif;
 }
 
-/* legend styles */
-.info {
-	padding: 6px 8px;
-	font: 14px/16px Arial, Helvetica, sans-serif;
-	color:rgb(255, 255, 255); 
-	background: rgb(103, 103, 103);
-	box-shadow: 0 0 15px rgba(0,0,0,0.2);
-	border-radius: 5px;
-	min-width: 250px;
-	min-height: 50px;
-}
-.info h4 {
-	margin: 0 0 5px;
-	color: #777;
+.sidebar {
+	grid-area: sidebar;
+	padding:10px;
+	background-color: rgb(0, 0, 0);
+	overflow: auto; /* allows the sidebar to overflow with a scrollbar */
 }
 
-.legend {
-	line-height: 18px;
-	color: rgb(255, 255, 255);
-	background: rgb(103, 103, 103);
-	min-width: 170px; 
-	text-align: center; 
+.sidebar-item {
+    padding: 40px; /* adds inner padding */
+    background: rgb(255, 253, 253); /* background color of the card */
+    border: 1px solid rgb(255, 255, 255); /* border width and color */
+    margin: 5px; /* outer padding */
+	cursor: pointer; /* change cursor to hand on hover */
 }
-.legend i {
-	width: 18px;
-	height: 18px;
-	float: none;
-	margin: auto;
-}
-
-.dashboard {
-	grid-area: dashboard;
-}
-
-.dashboard .closebtn {
-	position: absolute;
-	top: 0;
-	right: 25px;
-	font-size: 36px;
-	margin-left: 50px;
-	
-  }
-
-  #main {
-	transition: margin-left .5s; /* If you want a transition effect */
-	padding: 20px;
-  }
