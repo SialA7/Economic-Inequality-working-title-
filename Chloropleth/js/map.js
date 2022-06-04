@@ -377,17 +377,17 @@ function createInfoPanel(){
 		// if feature is highlighted
 		if(properties){
 			if (properties[extrPov] == -1){
-				this._div.innerHTML = `<b>${properties.Country}</b><br>Working poverty rate unavailable <br>Labor Rights Index: ${properties[labInd]}`;
+				this._div.innerHTML = `<b><h2>${properties.Country}</b></h2><br><b>Working poverty rate unavailable </b><br><b>Labor Rights Index:</b> ${properties[labInd]}`;
 			}
 			else {
-				this._div.innerHTML = `<b>${properties.Country}</b><br> Extreme poverty rate: ${properties[extrPov]}% <br> Moderate poverty rate: ${properties[modPov]}% <br> Near poverty rate: ${properties[nPov]}% <br> Labor Rights Index: ${properties[labInd]}`;
+				this._div.innerHTML = `<b><h2>${properties.Country}</b></h2><br> <b>Extreme poverty rate:</b> ${properties[extrPov]}% <br> <b>Moderate poverty rate:</b> ${properties[modPov]}% <br> <b>Near poverty rate:</b> ${properties[nPov]}% <br><b> Labor Rights Index</b>: ${properties[labInd]}`;
 			}
 			
 		}
 		// if feature is not highlighted
 		else
 		{
-			this._div.innerHTML = `Use the Toggles to see how<br> countries vary in either extreme, moderate,<br> or near poverty rates. Hover over the countries<br> to activate the info panel and  view its name, <br>levels of poverty, and labor index score. <br>Click on the orange markers to read some <br>case studies.`
+			this._div.innerHTML = `<b><h2>Using the Map</b></h2><br>Use the Toggles to see how<br> countries vary in either extreme, moderate,<br> or near poverty rates. Hover over the countries<br> to activate the info panel and  view its name, <br>levels of poverty, and labor index score. <br>Click on the orange people markers to read <br>some case studies.`
 		}
 	};
 
@@ -469,7 +469,7 @@ function resetHighlightOP(e) {
 // on mouse click on a feature, zoom in to it
 function zoomToFeature(e) {
 	var layer = e.target; 
-	map.fitBounds(e.target.getBounds());
+	//map.fitBounds(e.target.getBounds());
 	if (layer.feature.properties[extrPov] != -1 && layer.feature.properties[extrPov] != undefined && layer.feature.properties[extrPov] != ""){
 		createDashboard(layer.feature.properties)
 	}

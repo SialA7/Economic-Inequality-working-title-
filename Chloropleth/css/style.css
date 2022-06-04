@@ -103,8 +103,8 @@ body {
 .info {
 	padding: 6px 8px;
 	font: 14px/16px Arial, Helvetica, sans-serif;
-	color:rgb(255, 255, 255); 
-	background: rgb(103, 103, 103);
+	color:rgb(103, 103, 103); 
+	background: rgb(255, 255, 255);
 	box-shadow: 0 0 15px rgba(0,0,0,0.2);
 	border-radius: 5px;
 	min-width: 250px;
@@ -117,8 +117,8 @@ body {
 
 .legend {
 	line-height: 18px;
-	color: rgb(255, 255, 255);
-	background: rgb(103, 103, 103);
+	color:rgb(103, 103, 103); 
+	background: rgb(255, 255, 255);
 	min-width: 170px; 
 	text-align: center; 
 }
