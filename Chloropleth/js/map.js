@@ -520,5 +520,57 @@ function createDashboard(properties){
 	// create the chart
 	let chart = new ApexCharts(document.querySelector('.dashboard'), options)
 	chart.render()
+
+	//bar graph
+	let title1 = 'Overall Fair Labor Score'
+	let dataforgraph =[];
+
+	// loop through the data and add the properties object to the array
+	
+	geojson_data.features.forEach(function(item){
+		if (item.properties["OverallFairLabor"] >0)
+
+		dataforgraph.push(item.properties["OverallFairLabor"])})
+
+	// data fields
+	let fields1 = [];
+
+	// loop through the data and add the properties object to the array
+	geojson_data.features.forEach(function(item){
+		if (item.properties["OverallFairLabor"] >0)
+		
+		fields1.push(item.properties["NAME"])})
+
+
+	// set chart options
+	let options1 = {
+		chart: {
+			type: 'bar',
+			height: 3000,
+			animations: {
+				enabled: false,
+			}
+		},
+		title: {
+			text: title1,
+		},
+		plotOptions: {
+			bar: {
+				horizontal: true
+			}
+		},
+		series: [
+			{
+				data: dataforgraph
+			}
+		],
+		xaxis: {
+			categories: fields1
+		}
+	};
+	
+	// create the chart
+	let chart1 = new ApexCharts(document.querySelector('.dashboard'), options1)
+	chart1.render()
 }
 
