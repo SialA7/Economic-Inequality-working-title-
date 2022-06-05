@@ -377,17 +377,17 @@ function createInfoPanel(){
 		// if feature is highlighted
 		if(properties){
 			if (properties[extrPov] == -1){
-				this._div.innerHTML = `<b>${properties.Country}</b><br>Working poverty rate unavailable <br>Labor Rights Index: ${properties[labInd]}`;
+				this._div.innerHTML = `<b><h2>${properties.Country}</b></h2><br><b>Working poverty rate unavailable </b><br><b>Labor Rights Index:</b> ${properties[labInd]}`;
 			}
 			else {
-				this._div.innerHTML = `<b>${properties.Country}</b><br> Extreme poverty rate: ${properties[extrPov]}% <br> Moderate poverty rate: ${properties[modPov]}% <br> Near poverty rate: ${properties[nPov]}% <br> Labor Rights Index: ${properties[labInd]}`;
+				this._div.innerHTML = `<b><h2>${properties.Country}</b></h2><br> <b>Extreme poverty rate:</b> ${properties[extrPov]}% <br> <b>Moderate poverty rate:</b> ${properties[modPov]}% <br> <b>Near poverty rate:</b> ${properties[nPov]}% <br><b> Labor Rights Index</b>: ${properties[labInd]}`;
 			}
 			
 		}
 		// if feature is not highlighted
 		else
 		{
-			this._div.innerHTML = 'Hover over a country';
+			this._div.innerHTML = `<b><h2>Using the Map</b></h2><br>Use the Toggles to see how<br> countries vary in either extreme, moderate,<br> or near poverty rates. Hover over the countries<br> to activate the info panel and  view its name, <br>levels of poverty, and labor index score. <br>Click on the orange people markers to read <br>some case studies.`
 		}
 	};
 
@@ -468,6 +468,109 @@ function resetHighlightOP(e) {
 
 // on mouse click on a feature, zoom in to it
 function zoomToFeature(e) {
-	map.fitBounds(e.target.getBounds());
+	var layer = e.target; 
+	//map.fitBounds(e.target.getBounds());
+	if (layer.feature.properties[extrPov] != -1 && layer.feature.properties[extrPov] != undefined && layer.feature.properties[extrPov] != ""){
+		createDashboard(layer.feature.properties)
+	}
+}
+
+function createDashboard(properties){
+
+	// clear dashboard
+	$('.dashboard').empty();
+
+	console.log(properties)
+
+	// chart title
+	let title = 'Working Poverty Levels in ' + properties['Country'];
+	let abovePoverty = 100 - (Number(properties['ExtremePoor']) + Number(properties['ModeratePoor']) + Number(properties['NearPoor']));
+
+	// data values
+	let graphdata = [Number(properties['ExtremePoor']), 
+					Number(properties['ModeratePoor']), 
+					Number(properties['NearPoor']), abovePoverty];
+
+	// data fields
+	let fields = ['% in extreme poverty', '% in moderate poverty', '% in near poverty', '% above poverty'];
+
+	// set chart options (pull documentation from library)
+    //pie chart
+    let options = {
+		chart: {
+			type: 'pie',
+			height: 300,
+			width: 300,			
+			animations: {
+				enabled: true,
+			}
+		},
+		title: {
+			text: title,
+		},
+		series: graphdata,
+		labels: fields,
+		legend: {
+			position: 'right',
+			offsetY: 0,
+			height: 230,
+		  }
+	}; 
+	
+	// create the chart
+	let chart = new ApexCharts(document.querySelector('.dashboard'), options)
+	chart.render()
+
+	//bar graph
+	let title1 = 'Overall Fair Labor Score'
+	let dataforgraph =[];
+
+	// loop through the data and add the properties object to the array
+	
+	geojson_data.features.forEach(function(item){
+		if (item.properties["OverallFairLabor"] >0)
+
+		dataforgraph.push(item.properties["OverallFairLabor"])})
+
+	// data fields
+	let fields1 = [];
+
+	// loop through the data and add the properties object to the array
+	geojson_data.features.forEach(function(item){
+		if (item.properties["OverallFairLabor"] >0)
+		
+		fields1.push(item.properties["NAME"])})
+
+
+	// set chart options
+	let options1 = {
+		chart: {
+			type: 'bar',
+			height: 3000,
+			animations: {
+				enabled: false,
+			}
+		},
+		title: {
+			text: title1,
+		},
+		plotOptions: {
+			bar: {
+				horizontal: true
+			}
+		},
+		series: [
+			{
+				data: dataforgraph
+			}
+		],
+		xaxis: {
+			categories: fields1
+		}
+	};
+	
+	// create the chart
+	let chart1 = new ApexCharts(document.querySelector('.dashboard'), options1)
+	chart1.render()
 }
 
