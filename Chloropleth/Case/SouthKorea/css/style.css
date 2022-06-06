@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Maven+Pro:wght@800&display=swap');
+
+body,html {
+	margin:0;
+	height:100%;
+	width:100%;
+}
+
+#map {
+	height: 100%;
+}
+
+body {
+	display: grid;
+	grid-template-rows: 130px 1fr;
+	grid-template-columns: 170px 1fr;
+	grid-template-areas: 
+	"header header"
+    "navigation navigation"
+	"title title"
+	"sidebar content"
+    "footer footer"; 
+}
+
+.header {
+	grid-area: header;
+	padding:5px;
+	background-color: rgb(0, 0, 0);
+	color: rgb(254, 254, 254);
+	font-size: 2em;
+	font-family: 'Maven Pro', sans-serif;
+	font-weight: bold;
+}
+
+.navigation{
+    grid-area: navigation;
+	height:fit-content;
+    background-color: rgb(0, 0, 0); 
+	grid-gap:0; 
+}
+
+.navigation-item{
+	max-height: 20px;
+	text-align: center;
+    padding: 10px; 
+    background: rgb(0, 0, 0);
+    color: rgb(247, 247, 247); 
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+	float: left;
+	position: sticky; 
+}
+
+.navigation-item:hover{
+	max-height: 20px;
+	text-align: center;
+    background: rgb(0, 2, 5);
+}
+
+.active-navigation-item{
+	max-height: 20px;
+	text-align: center;
+    padding: 10px; 
+    background: rgb(249, 171, 103);
+    color: rgb(241, 225, 210); 
+    font-family: 'Montserrat',sans-serif;
+	display: inline; 
+	float: left;
+	position: sticky; 
+	border-right: 1px solid rgb(249, 171, 103) 
+}
+
+.title {
+	grid-area: title;
+	margin:0; 
+	padding:10px;
+	background-color: rgb(8, 33, 60);
+	color: rgb(255, 151, 60);
+	font-size:2.5em;
+	font-family:'Libre Bodoni', serif;
+	font-weight:lighter;
+}
+
+.countries {
+
+	font-family:'Montserrat', sans-serif;
+	font-weight:lighter;
+	text-align: center;
+	color: rgb(0, 0, 0); 
+
+
+}
+h2{
+	margin:0px; 
+	font-size:2em;
+}
+
+/* legend styles */
+.info {
+	padding: 6px 8px;
+	font: 14px/16px Arial, Helvetica, sans-serif;
+	background: white;
+	background: rgba(255,255,255,0.8);
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 5px;
+	color:black;
+	min-width: 250px;
+	min-height: 50px;
+}
+.info h4 {
+	margin: 0 0 5px;
+	color: #777;
+}
+
+.legend {
+    line-height: 18px;
+    color: #555;
+}
+.legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.7;
+}
+
+.content {
+	margin:0;
+	height:700px; 
+	grid-area: content;
+	background: rgb(255, 255, 255);
+    color: rgb(0, 0, 0); 
+	font-family: 'Helvetica', sans-serif;
+	margin-left: 25%;
+	margin-right:25%;
+}
+
+.footer {
+	grid-area: footer;
+	padding:10px;
+	background-color: rgb(10, 45, 82);
+    color: rgb(249, 171, 103);
+    font-family: 'Helvetica', sans-serif;
+}
+
+.sidebar {
+	grid-area: sidebar;
+	padding:10px;
+	background-color: rgb(0, 0, 0);
+	position:sticky;
+ /* allows the sidebar to overflow with a scrollbar */
+}
+
+.sidebar-item {
+    padding: 40px; /* adds inner padding */
+    background: rgb(255, 253, 253); /* background color of the card */
+    border: 1px solid gray; /* border width and color */
+    margin: 5px; /* outer padding */
+	cursor: pointer; /* change cursor to hand on hover */
+}

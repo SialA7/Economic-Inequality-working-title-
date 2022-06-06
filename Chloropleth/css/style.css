@@ -125,8 +125,8 @@ body {
 
 .legend {
 	line-height: 18px;
-	color:rgb(103, 103, 103); 
-	background: rgb(255, 255, 255);
+	color:rgb(255, 255, 255);
+	background: rgb(103, 103, 103);
 	min-width: 170px; 
 	text-align: center; 
 }
