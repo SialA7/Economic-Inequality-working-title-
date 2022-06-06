@@ -126,7 +126,7 @@ function mapGeoJSON(extremePoverty, moderatePoverty, nearPoverty, laborIndex){
 	L.control.layers(null,layers).addTo(map)
 
 	// fit to bounds
-	map.fitBounds(geojson_layerEP.getBounds())
+	map.setView([37, 22], 2.3)
 
 	createLegend();
 	createInfoPanel();
@@ -377,17 +377,17 @@ function createInfoPanel(){
 		// if feature is highlighted
 		if(properties){
 			if (properties[extrPov] == -1){
-				this._div.innerHTML = `<b><h2>${properties.Country}</b></h2><br><b>Working poverty rate unavailable </b><br><b>Labor Rights Index:</b> ${properties[labInd]}`;
+				this._div.innerHTML = `<b><h2>${properties.Country}</b></h2><b>Working poverty rate unavailable </b><br><b>Labor Rights Index:</b> ${properties[labInd]}`;
 			}
 			else {
-				this._div.innerHTML = `<b><h2>${properties.Country}</b></h2><br> <b>Extreme poverty rate:</b> ${properties[extrPov]}% <br> <b>Moderate poverty rate:</b> ${properties[modPov]}% <br> <b>Near poverty rate:</b> ${properties[nPov]}% <br><b> Labor Rights Index</b>: ${properties[labInd]}`;
+				this._div.innerHTML = `<b><h2>${properties.Country}</b></h2><b>Extreme poverty rate:</b> ${properties[extrPov]}% <br> <b>Moderate poverty rate:</b> ${properties[modPov]}% <br> <b>Near poverty rate:</b> ${properties[nPov]}% <br><b> Labor Rights Index</b>: ${properties[labInd]}`;
 			}
 			
 		}
 		// if feature is not highlighted
 		else
 		{
-			this._div.innerHTML = `<b><h2>Using the Map</b></h2><br>Use the Toggles to see how<br> countries vary in either extreme, moderate,<br> or near poverty rates. Hover over the countries<br> to activate the info panel and  view its name, <br>levels of poverty, and labor index score. <br>Click on the orange people markers to read <br>some case studies.`
+			this._div.innerHTML = `<b><h2>Using the Map</b></h2> Use the toggles in the top right to see how countries vary in either extreme, moderate, or near working poverty rates on the map. Hover over a country to view its name, levels of poverty, and labor index score.`
 		}
 	};
 
@@ -409,7 +409,7 @@ function onEachFeatureMP(feature, layer) {
 	layer.on({
 		mouseover: highlightFeature,
 		mouseout: resetHighlightMP,
-		click: zoomToFeature
+		click: zoomToFeature,
 	});
 }
 
@@ -417,7 +417,7 @@ function onEachFeatureNP(feature, layer) {
 	layer.on({
 		mouseover: highlightFeature,
 		mouseout: resetHighlightNP,
-		click: zoomToFeature
+		click: zoomToFeature, 
 	});
 }
 
@@ -433,18 +433,19 @@ function onEachFeatureOP(feature, layer){
 function highlightFeature(e) {
 	var layer = e.target;
 
-	// style to use on mouse over
-	layer.setStyle({
-		weight: 3,
-		stroke: true, 
-		color: '#ffffff',
-	});
-
-	if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-		layer.bringToFront();
+	if (layer.feature.properties.Country !=  undefined){
+		layer.setStyle({
+			weight: 3,
+			stroke: true, 
+			color: '#ffffff',
+		});
+	
+		if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+			layer.bringToFront();
+		}
+	
+		info_panel.update(layer.feature.properties)
 	}
-
-	info_panel.update(layer.feature.properties)
 }
 
 // on mouse out, reset the style, otherwise, it will remain highlighted
@@ -476,7 +477,9 @@ function zoomToFeature(e) {
 }
 
 function createDashboard(properties){
-
+	//open dashboard
+	document.querySelector(".wrapper").classList.toggle("dashboard-open");
+	
 	// clear dashboard
 	$('.dashboard').empty();
 
@@ -574,3 +577,6 @@ function createDashboard(properties){
 	chart1.render()
 }
 
+function closeDashboard(properties){
+	document.querySelector(".wrapper").classList.toggle("dashboard-close");
+}

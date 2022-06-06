@@ -20,28 +20,36 @@ body {
     "navigation navigation"
 	"dashboard content"
     "footer footer"; 
+	overflow-y: hidden;
 }
 
 .header {
 	grid-area: header;
-	margin-top: 0px;
-	padding:5px;
+	height: 18vh; 
 	background-color: rgb(0, 0, 0);
 	color: rgb(254, 254, 254);
-	font-size: 2em;
 	font-family: 'Maven Pro', sans-serif;
 	font-weight: bold;
 }
 
+.header h1{
+	font-size: 4em;
+	margin-top: 45px;
+	margin-bottom: 0; 
+}
+
 .navigation{
+	padding-top: 1px; 
     grid-area: navigation;
-	height:fit-content;
+	width: 100vw; 
+	height: 6vh;
 	background-color: rgb(0, 0, 0);  
 	grid-gap:0; 
 }
 
 .navigation-item{
-	height: 20px;
+	height: 3vh;
+	margin-bottom: 3px; 
 	text-align: center;
     padding: 10px; 
     background: rgb(0, 0, 0);
@@ -53,13 +61,13 @@ body {
 }
 
 .navigation-item:hover{
-	height: 20px;
+	height: 3vh;
 	text-align: center;
     background: rgb(99, 99, 99);
 }
 
 .active-navigation-item{
-	height: 20px;
+	height: 3vh;
 	text-align: center;
     padding: 10px; 
 	background: rgb(249, 171, 103);
@@ -68,34 +76,34 @@ body {
 	display: inline; 
 	float: left;
 	position: sticky; 
-	border-right: 1px solid rgb(249, 171, 103)
+	border-right: 1px solid rgb(249, 171, 103);
 }
 
-.title {
-	grid-area: title;
-	margin:0; 
-	padding:10px;
-	background-color: rgb(8, 33, 60);
-	color: rgb(255, 151, 60);
-	font-size:2.5em;
-	font-family:'Libre Bodoni', serif;
-	font-weight:lighter;
-}
+.wrapper {
+	display: flex;
+	height: 100vh;
+	width: 100vw; 
+	transition: all 0.25s; 
+  }
+
 .content {
+	margin-top: 10px; 
 	margin:0;
-	height: 700px;
+	height: 80vh;
+	width: 100vw; 
 	grid-area: content;
 	background: rgb(8, 33, 60);
     color: rgb(241, 225, 210); 
 	font-family: 'Helvetica', sans-serif;
-	overflow:hidden; 
+	flex-grow: 1;
+	transition: all 0.25s; 
 }
 
 .footer {
 	grid-area: footer;
 	padding:10px;
-	background-color: rgb(10, 45, 82);
-    color: rgb(249, 171, 103);
+	background: rgb(8, 33, 60);
+    color: rgb(241, 225, 210); 
     font-family: 'Helvetica', sans-serif;
 }
 
@@ -107,10 +115,10 @@ body {
 	background: rgb(255, 255, 255);
 	box-shadow: 0 0 15px rgba(0,0,0,0.2);
 	border-radius: 5px;
-	min-width: 250px;
-	min-height: 50px;
+	width: 250px;
+	height: fit-content;
 }
-.info h4 {
+.h4 {
 	margin: 0 0 5px;
 	color: #777;
 }
@@ -130,19 +138,22 @@ body {
 }
 
 .dashboard {
-	grid-area: dashboard;
-}
-
-.dashboard .closebtn {
-	position: absolute;
-	top: 0;
-	right: 25px;
-	font-size: 36px;
-	margin-left: 50px;
-	
+	max-height: 80vh; 
+	flex-shrink: 0;
+	padding: 20px;
+	color: #232323;
+	background: #bab8bf;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
+	overflow-y: auto;
+	transition: display 0.25s; 
   }
 
-  #main {
-	transition: margin-left .5s; /* If you want a transition effect */
-	padding: 20px;
+.dashboard-close .dashboard{
+	display: none;
+	transition: display 0.25s; 
+}
+  
+.dashboard-open .dashboard {
+	display: initial;
+	transition: display 0.25s; 
   }
