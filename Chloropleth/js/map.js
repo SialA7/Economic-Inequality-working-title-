@@ -525,31 +525,31 @@ function createDashboard(properties){
 	chart.render()
 
 	//bar graph
-	let title1 = 'Overall Fair Labor Score'
-	let dataforgraph =[];
+	let title1 = "Labor Index of Best,Worst & Select Countries"
+	let dataforgraph =[Number(properties['OverallFairLabor']),8.36,7.78,7.48,7.34,5.84,4.13,3.69,3.31,1.48,0.17,0,0];
 
 	// loop through the data and add the properties object to the array
 	
-	geojson_data.features.forEach(function(item){
-		if (item.properties["OverallFairLabor"] >0)
+	//geojson_data.features.forEach(function(item){
+		//if (item.properties["OverallFairLabor"] >0)
 
-		dataforgraph.push(item.properties["OverallFairLabor"])})
+		//dataforgraph.push(item.properties["OverallFairLabor"])})
 
 	// data fields
-	let fields1 = [];
+	let fields1 = [properties['NAME'],'Bangladesh','Pakistan','Egypt','Korea','Indonesia','Mexico','Burundi','Ethiopia','Uruguay','Norway','Finland','San Marino'];
 
 	// loop through the data and add the properties object to the array
-	geojson_data.features.forEach(function(item){
-		if (item.properties["OverallFairLabor"] >0)
+	//geojson_data.features.forEach(function(item){
+		//if (item.properties["OverallFairLabor"] >0)
 		
-		fields1.push(item.properties["NAME"])})
+		//fields1.push(item.properties["NAME"])})
 
 
 	// set chart options
 	let options1 = {
 		chart: {
 			type: 'bar',
-			height: 3000,
+			height: 700,
 			animations: {
 				enabled: false,
 			}
