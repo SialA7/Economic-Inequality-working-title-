@@ -156,4 +156,19 @@ body {
 .dashboard-open .dashboard {
 	display: initial;
 	transition: display 0.25s; 
-  }
+}
+
+.dashboard-ranking{
+	font-size: 5em; 
+	color:rgb(255, 149, 56); 
+	text-align: center; 
+	font-family: 'Maven Pro', sans-serif; 
+}
+
+.dashboard-text{
+	font-size: 0.9em; 
+	color: #232323; 
+	font-family:Verdana, Geneva, Tahoma, sans-serif;  
+	font-weight: bold; 
+	text-align: center; 
+}

@@ -6,6 +6,7 @@ let zl = 3;
 let path = 'data/laborinthdata.csv';
 let markers = L.featureGroup();
 let csvdata;
+let LIvalues = [];
 
 let colorMat = [['#205DD4', '#3f40a9', '#5d227e'],
 				['#839AE2', '#7256aa', '#9640af'],
@@ -63,7 +64,6 @@ function mapGeoJSON(extremePoverty, moderatePoverty, nearPoverty, laborIndex){
 	let MPvalues = [];
 	let NPvalues = [];
 	let OPvalues = [];
-	let LIvalues = [];
 
 	geojson_data.features.forEach(function(item,index){
 		if (item.properties[extremePoverty] == "" || item.properties[extremePoverty] == undefined){
@@ -356,7 +356,7 @@ function createLegend(){
 	legend.onAdd = function (map) {
 		var div = L.DomUtil.create('div', 'info legend');
 			div.innerHTML +=
-					'<b> Legend: </b> <br> <img src= images/legend.png width = 150 height = 150> <br> <img src = images/legend2.png width = 100 height = 100>';
+					'<b> Legend: </b> <br> <b> Labor index: </b> score of labor rights violations from 0-10, where 10 represents the most severe violations <br> <b> Working poverty rate: </b> the percentage of employed people who fall below global poverty lines. <br> See <a href="https://SialA7.github.io/Laborinth/Chloropleth/About/" style="color:white">About page</a> for more information. <br> <img src= images/legend.png width = 150 height = 150> <br>';
 		
 			return div;
 		};
@@ -387,7 +387,7 @@ function createInfoPanel(){
 		// if feature is not highlighted
 		else
 		{
-			this._div.innerHTML = `<b><h2>Using the Map</b></h2> Use the toggles in the top right to see how countries vary in either extreme, moderate, or near working poverty rates on the map. Hover over a country to view its name, levels of poverty, and labor index score.`
+			this._div.innerHTML = `<b><h2>Using the Map</b></h2> Use the toggles in the top right to view either extreme, moderate, or near working poverty rates on the map. Hover over a country to view its name, levels of poverty, and labor index score. Click into countries for more data insights and orange icons to read case study narratives.`
 		}
 	};
 
@@ -524,9 +524,35 @@ function createDashboard(properties){
 	let chart = new ApexCharts(document.querySelector('.dashboard'), options)
 	chart.render()
 
+
+	let LIranking = 0
+	for(i=0; i<LIvalues.length; i++){
+		if(properties['OverallFairLabor'] != undefined && LIvalues[i] != undefined){
+			if (properties['OverallFairLabor'] < LIvalues[i]){
+				LIranking++; 
+			}
+		}
+	}
+
+	$('.dashboard').append(`<div class = "dashboard-text"> <br> ${properties['NAME']} is... </div>`);
+	$('.dashboard').append(`<div class = "dashboard-ranking"> #${LIranking}</div>`); 
+	$('.dashboard').append(`<div class = "dashboard-text"> for worst labor rights.<br> </div>`);
+
+
 	//bar graph
-	let title1 = "Labor Index of Best,Worst & Select Countries"
-	let dataforgraph =[Number(properties['OverallFairLabor']),8.36,7.78,7.48,7.34,5.84,4.13,3.69,3.31,1.48,0.17,0,0];
+	let title1 = "Labor Index Compared to Select Countries"
+	let dataforgraph =[8.36,7.78,7.48,7.34,5.84,4.13,3.69,3.31,1.48,0.17,0,0];
+
+	let LIindex = 0; 
+	for (i=0; i<dataforgraph.length; i++){
+		if(properties['OverallFairLabor'] != undefined){
+			if (Number(properties['OverallFairLabor']) < dataforgraph[i]){
+				LIindex++;  
+			}
+		}
+		
+	}
+	
 
 	// loop through the data and add the properties object to the array
 	
@@ -536,8 +562,20 @@ function createDashboard(properties){
 		//dataforgraph.push(item.properties["OverallFairLabor"])})
 
 	// data fields
-	let fields1 = [properties['NAME'],'Bangladesh','Pakistan','Egypt','Korea','Indonesia','Mexico','Burundi','Ethiopia','Uruguay','Norway','Finland','San Marino'];
+	let fields1 = ['Bangladesh','Pakistan','Egypt','South Korea','Indonesia','Mexico','Burundi','Ethiopia','Uruguay','Norway','Finland','San Marino'];
 
+	let fieldPresent = false; 
+	for (i=0; i<fields1.length; i++){
+		if (fields1[i] == properties['NAME']){
+			fieldPresent = true
+		}
+	}
+
+	if (fieldPresent != true){
+		fields1.splice(LIindex, 0, properties['NAME']);
+		dataforgraph.splice(LIindex, 0, Number(properties['OverallFairLabor']));
+	}
+	
 	// loop through the data and add the properties object to the array
 	//geojson_data.features.forEach(function(item){
 		//if (item.properties["OverallFairLabor"] >0)
@@ -569,14 +607,28 @@ function createDashboard(properties){
 		],
 		xaxis: {
 			categories: fields1
-		}
+		},
+		colors: [
+			function({ value, seriesIndex, w }) {
+			  if (value == dataforgraph[LIindex]) {
+				return '#FF9538'
+			  } else {
+				return '#1c95f2'
+			  }
+			}
+		  ]
 	};
 	
 	// create the chart
 	let chart1 = new ApexCharts(document.querySelector('.dashboard'), options1)
 	chart1.render()
+
 }
 
 function closeDashboard(properties){
 	document.querySelector(".wrapper").classList.toggle("dashboard-close");
+}
+
+function getLIRanking(properties){
+
 }
