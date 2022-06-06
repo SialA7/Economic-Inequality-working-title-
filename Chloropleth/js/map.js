@@ -525,7 +525,7 @@ function createDashboard(properties){
 	chart.render()
 
 
-	let LIranking = 0
+	let LIranking = 1
 	for(i=0; i<LIvalues.length; i++){
 		if(properties['OverallFairLabor'] != undefined && LIvalues[i] != undefined){
 			if (properties['OverallFairLabor'] < LIvalues[i]){
